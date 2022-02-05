@@ -1,3 +1,6 @@
 __pychace__
 *.pyc
 .vscode
+
+build
+*.egg-info

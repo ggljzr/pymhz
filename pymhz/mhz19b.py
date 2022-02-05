@@ -1,8 +1,16 @@
+from time import sleep
+
 from serial import Serial
 
 
 class MHZ19B:
-    def __init__(self, port: str, baudrate: int):
+
+    CONCENTRATION_COMMAND = bytes(
+        [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
+    )
+    RESPONSE_LENGTH = 9
+
+    def __init__(self, port: str, baudrate: int = 9600):
         self.port = port
         self.baudrate = baudrate
         self.serial = Serial(port=None, baudrate=baudrate)
@@ -25,3 +33,9 @@ class MHZ19B:
 
     def __exit__(self, *args, **kwargs):
         self.close()
+
+    def read_concentration(self) -> bytes:
+        self.serial.write(self.CONCENTRATION_COMMAND)
+        sleep(0.1)
+        response = self.serial.read(self.RESPONSE_LENGTH)
+        return response

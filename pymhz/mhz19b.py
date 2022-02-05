@@ -2,6 +2,30 @@ from time import sleep
 
 from serial import Serial
 
+from .utils import calculate_checksum
+
+
+class Response:
+    """
+    Response from the MH-Z19B sensor.
+    """
+
+    def __init__(self, data: bytes) -> None:
+        self.data = data
+
+    @property
+    def checksum(self) -> int:
+        return calculate_checksum(self.data)
+
+    @property
+    def is_valid(self) -> bool:
+        """
+        Validates the data against expected checksum
+        (last byte of the recieved data).
+        """
+
+        return self.checksum == self.data[-1]
+
 
 class MHZ19B:
 

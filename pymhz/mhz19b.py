@@ -26,6 +26,18 @@ class Response:
 
         return self.checksum == self.data[-1]
 
+    @property
+    def concentration(self) -> float:
+        """
+        Returns calculated CO2 concentration or -1 if the checksum
+        of the response is not valid.
+        """
+
+        if not self.is_valid:
+            return -1
+
+        return float(256 * self.data[2] + self.data[3])
+
 
 class MHZ19B:
 
@@ -58,8 +70,8 @@ class MHZ19B:
     def __exit__(self, *args, **kwargs):
         self.close()
 
-    def read_concentration(self) -> bytes:
+    def read_concentration(self) -> Response:
         self.serial.write(self.CONCENTRATION_COMMAND)
         sleep(0.1)
-        response = self.serial.read(self.RESPONSE_LENGTH)
-        return response
+        data = self.serial.read(self.RESPONSE_LENGTH)
+        return Response(data)

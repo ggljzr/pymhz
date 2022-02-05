@@ -44,6 +44,13 @@ class MHZ19B:
     CONCENTRATION_COMMAND = bytes(
         [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
     )
+    ENABLE_AUTOCALIBRATION_COMMAND = bytes(
+        [0xFF, 0x01, 0x79, 0xA0, 0x00, 0x00, 0x00, 0x00, 0xE6]
+    )
+    DISABLE_AUTOCALIBRATION_COMMAND = bytes(
+        [0xFF, 0x01, 0x79, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86]
+    )
+
     RESPONSE_LENGTH = 9
 
     def __init__(self, port: str, baudrate: int = 9600):
@@ -69,6 +76,14 @@ class MHZ19B:
 
     def __exit__(self, *args, **kwargs):
         self.close()
+
+    def enable_autocalibration(self):
+        self.serial.write(self.ENABLE_AUTOCALIBRATION_COMMAND)
+        sleep(0.1)
+
+    def disable_autocalibration(self):
+        self.serial.write(self.DISABLE_AUTOCALIBRATION_COMMAND)
+        sleep(0.1)
 
     def read_concentration(self) -> Response:
         self.serial.write(self.CONCENTRATION_COMMAND)

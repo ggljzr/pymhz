@@ -39,3 +39,7 @@ with MHZ19B("/dev/ttUSB0") as sensor:
         print("Invalid response!")
 
 ```
+
+## Links
+
+* [MH-Z19B dataheet](https://www.winsen-sensor.com/d/files/infrared-gas-sensor/mh-z19b-co2-ver1_0.pdf)

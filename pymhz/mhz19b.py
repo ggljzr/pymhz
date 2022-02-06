@@ -50,6 +50,9 @@ class MHZ19B:
     DISABLE_AUTOCALIBRATION_COMMAND = bytes(
         [0xFF, 0x01, 0x79, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86]
     )
+    ZERO_POINT_CALIBRATION_COMMAND = bytes(
+        [0xFF, 0x01, 0x87, 0x00, 0x00, 0x00, 0x00, 0x00, 0x78]
+    )
 
     RESPONSE_LENGTH = 9
 
@@ -83,6 +86,10 @@ class MHZ19B:
 
     def disable_autocalibration(self):
         self.serial.write(self.DISABLE_AUTOCALIBRATION_COMMAND)
+        sleep(0.1)
+
+    def enable_zero_point_calibration(self):
+        self.serial.write(self.ZERO_POINT_CALIBRATION_COMMAND)
         sleep(0.1)
 
     def read_concentration(self) -> Response:
